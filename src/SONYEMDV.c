@@ -281,9 +281,11 @@ LOCALPROC Drive_UpdateChecksums(tDrive Drive_No)
 }
 #endif
 
+#define checkheaderblocks 64
+
 #define checkheaderoffset 0
 #if NonDiskProtect
-#define checkheadersize (3 * 512)
+#define checkheadersize (checkheaderblocks * 512)
 #else
 #define checkheadersize 128
 #endif
@@ -438,16 +440,19 @@ LOCALFUNC tMacErr vSonyNextPendingInsert(tDrive *Drive_No)
 						}
 					}
 
-					// Handle .iso's with HFS partitions. Based on the Basilisk II find_hfs_partition implementation.
+					// Handle file with HFS partitions. Based on the Basilisk II find_hfs_partition implementation.
 					if (! gotFormat) {
-						ui4r drSigWord = do_get_mem_word(
-							&Temp[0x400]);
-						if (drSigWord == 0x504d) { // HFS partition map magic number.
-							ui3p map = &Temp[0x400];
-							if (strcmp((char *)(map + 48), "Apple_HFS") == 0) {
-								DataOffset = ((map[8] << 24) | (map[9] << 16) | (map[10] << 8) | map[11]) << 9;
-								DataSize = 512 * ((map[12] << 24) | (map[13] << 16) | (map[14] << 8) | map[15]);
-								gotFormat = trueblnr;
+						int i;
+						for (i = 0; i < checkheaderblocks; i++) {
+							ui4r drSigWord = do_get_mem_word(&Temp[512 * i]);
+							if (drSigWord == 0x504D) { // HFS partition map magic number.
+								ui3p map = &Temp[512 * i];
+								if (strcmp((char *)(map + 48), "Apple_HFS") == 0) {
+									DataOffset = ((map[8] << 24) | (map[9] << 16) | (map[10] << 8) | map[11]) << 9;
+									DataSize = 512 * ((map[12] << 24) | (map[13] << 16) | (map[14] << 8) | map[15]);
+									gotFormat = trueblnr;
+									break;
+								}
 							}
 						}
 					}
