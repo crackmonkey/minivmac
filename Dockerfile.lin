@@ -1,0 +1,22 @@
+FROM ubuntu:22.04 as setup
+
+RUN apt update
+RUN apt install mingw-w64 build-essential libx11-dev -y
+
+FROM setup AS build
+ARG MACHINE_TYPE="II"
+ARG MAINTAINER="none"
+ARG HOMEPAGE="https://example.com"
+
+COPY . /
+RUN gcc -o setup_t setup/tool.c
+
+RUN ./setup_t -maintainer "$MAINTAINER" \
+        -homepage "$HOMEPAGE" \
+        -n "minivmac-3.7-bluescsi" \
+        -t lx64 \
+        -m II \
+        > setup.sh
+RUN sed -i '/.*SDL\.h/i printf \"%s\\n\" \"#define SDL_MAIN_HANDLED\" \>\> \"\$\{DestFile\}\"' setup.sh
+RUN bash -x ./setup.sh
+RUN export PATH=.:$PATH; make -j $(nproc)

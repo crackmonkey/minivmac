@@ -1,0 +1,31 @@
+FROM ubuntu:22.04 AS setup
+# TODO: Requires SDL2.dll from github.com/libsdl-org/SDL/releases
+
+RUN apt update
+RUN apt install mingw-w64 build-essential wget -y
+RUN wget https://www.libsdl.org/release/SDL2-devel-2.0.22-mingw.tar.gz
+RUN gzip -dc SDL2-devel-2.0.22-mingw.tar.gz | tar -xvf -
+RUN cd SDL2-2.0.22 && make install-package arch=x86_64-w64-mingw32 prefix=/usr/x86_64-w64-mingw32
+RUN ln -s /usr/bin/x86_64-w64-mingw32-gcc gcc.exe
+RUN ln -s /usr/bin/x86_64-w64-mingw32-windres windres.exe
+RUN ln -s /usr/bin/x86_64-w64-mingw32-strip strip.exe
+RUN ln -s src SRC
+
+FROM setup AS build
+ARG MACHINE_TYPE="II"
+ARG MAINTAINER="none"
+ARG HOMEPAGE="https://example.com"
+
+COPY . /
+RUN gcc -o setup_t setup/tool.c
+
+RUN ./setup_t -maintainer "$MAINTAINER" \
+        -homepage "$HOMEPAGE" \
+        -m "$MACHINE_TYPE" \
+        -n "minivmac-3.7-bluescsi" \
+        -e mgw \
+        -t wx64 \
+        > setup.sh
+RUN sed -i '/.*SDL\.h/i printf \"%s\\n\" \"#define SDL_MAIN_HANDLED\" \>\> \"\$\{DestFile\}\"' setup.sh
+RUN bash -x ./setup.sh
+RUN export PATH=.:$PATH; make -j $(nproc)
