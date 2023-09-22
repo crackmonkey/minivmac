@@ -49,7 +49,20 @@ LOCALPROC WriteXCDcallgcc(void)
 LOCALPROC WriteBgcCompileAsmLinkCommonOptions(void)
 {
 	if (gbk_ide_xcd == cur_ide) {
-		if (ide_vers >= 12100) {
+		if (ide_vers >= 13000) {
+			switch (cur_targ) {
+				case gbk_targ_mc64:
+					WriteCStrToDestFile(" -target"
+						" x86_64-apple-macos10.13");
+					break;
+				case gbk_targ_mcar:
+					WriteCStrToDestFile(" -target"
+						" arm64-apple-macos10.15");
+					break;
+				default:
+					break;
+			}
+		} else if (ide_vers >= 12100) {
 			switch (cur_targ) {
 				case gbk_targ_mc64:
 					WriteCStrToDestFile(" -target"

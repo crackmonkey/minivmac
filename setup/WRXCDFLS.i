@@ -1146,6 +1146,9 @@ LOCALPROC WriteAPBXCDBuildSettings(void)
 			WriteDestFileLn("MACOSX_DEPLOYMENT_TARGET = 10.15;");
 		} else
 		{
+			if (ide_vers >= 13000) {
+				WriteDestFileLn("MACOSX_DEPLOYMENT_TARGET = 10.13;");
+			} else
 			if (ide_vers >= 12100) {
 				WriteDestFileLn("MACOSX_DEPLOYMENT_TARGET = 10.9;");
 			} else
