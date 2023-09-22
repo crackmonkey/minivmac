@@ -1,6 +1,7 @@
 # ROM and disk images
 *.ROM
 *.dsk
+*.hda
 
 # Cross-platform setup and build output
 setup_t
@@ -8,12 +9,22 @@ setup.sh
 cfg/
 bld/
 Makefile
+build/
+test/
 
 # macOS build output
 minivmac.xcodeproj/
 minivmac.app/
 
+# Windows build output
+minivmac.vcxproj
+minivmac.vcxproj.filters
+
 # Emscripten build output
 minivmac-*
 *.wasm
 *.wasm.map
+
+# Other
+.DS_Store
+dbglog.txt
