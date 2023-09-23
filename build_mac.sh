@@ -21,6 +21,7 @@ do
                         -n "minivmac-3.7-bluescsi" \
                         -t $platform \
                         -m $type \
+                        -ndp 0 \
                         -ev 13000 \
                         > setup.sh
                 . ./setup.sh

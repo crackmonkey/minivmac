@@ -15,6 +15,7 @@ RUN ./setup_t -maintainer "$MAINTAINER" \
         -homepage "$HOMEPAGE" \
         -n "minivmac-3.7-bluescsi" \
         -t lx64 \
+        -ndp 0 \
         -m II \
         > setup.sh
 RUN sed -i '/.*SDL\.h/i printf \"%s\\n\" \"#define SDL_MAIN_HANDLED\" \>\> \"\$\{DestFile\}\"' setup.sh
