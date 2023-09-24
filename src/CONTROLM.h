@@ -1393,14 +1393,13 @@ LOCALFUNC tMacErr ROM_IsValid(void)
 	return mnvm_noErr;
 }
 
-#if NonDiskProtect
+// #if NonDiskProtect
 GLOBALOSGLUPROC WarnMsgUnsupportedDisk(void)
 {
-	MacMsgOverride("Unsupported Disk Image",
-		"I do not recognize the format of the Disk Image,"
-		" and so will not try to mount it.");
+	MacMsgOverride("BlueSCSI Disk Image",
+		"Will use only first HFS partition.");
 }
-#endif
+// #endif
 
 LOCALFUNC blnr WaitForRom(void)
 {

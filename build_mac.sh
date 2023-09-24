@@ -4,7 +4,7 @@
 which xcodebuild
 which gcc
 
-declare -a types=("II" "Plus" "SE")
+declare -a types=("II" "Plus")
 declare -a platforms=("mc64" "mcar")
 MAINTAINER="erichelgeson@gmail.com"
 HOMEPAGE="https://bluescsi.com"
@@ -21,7 +21,7 @@ do
                         -n "minivmac-3.7-bluescsi" \
                         -t $platform \
                         -m $type \
-                        -ndp 0 \
+                        -bg 1 \
                         -ev 13000 \
                         > setup.sh
                 . ./setup.sh

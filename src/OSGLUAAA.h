@@ -38,9 +38,9 @@
 EXPORTOSGLUPROC WarnMsgAbnormalID(ui4r id);
 #endif
 
-#if NonDiskProtect
+// #if NonDiskProtect
 EXPORTOSGLUPROC WarnMsgUnsupportedDisk(void);
-#endif
+// #endif
 
 #if dbglog_HAVE
 EXPORTOSGLUPROC dbglog_writeCStr(char *s);

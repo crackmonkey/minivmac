@@ -310,7 +310,8 @@ LOCALFUNC tMacErr vSonyNextPendingInsert(tDrive *Drive_No)
 			ui5r TagOffset = 0;
 #endif
 
-#if Sony_SupportOtherFormats || NonDiskProtect
+// #if Sony_SupportOtherFormats  || NonDiskProtect
+#if Sony_SupportOtherFormats
 #if IncludeSonyRawMode
 			if (! vSonyRawMode)
 #endif
@@ -451,6 +452,7 @@ LOCALFUNC tMacErr vSonyNextPendingInsert(tDrive *Drive_No)
 									DataOffset = ((map[8] << 24) | (map[9] << 16) | (map[10] << 8) | map[11]) << 9;
 									DataSize = 512 * ((map[12] << 24) | (map[13] << 16) | (map[14] << 8) | map[15]);
 									gotFormat = trueblnr;
+									MacMsg("BlueSCSI Disk Found!", " ", falseblnr);
 									break;
 								}
 							}
@@ -459,7 +461,8 @@ LOCALFUNC tMacErr vSonyNextPendingInsert(tDrive *Drive_No)
 
 					if (! gotFormat) {
 						WarnMsgUnsupportedDisk();
-						result = -1;
+						// It's still ok, allow OS to format.
+						// result = -1;
 					}
 #endif
 				}
