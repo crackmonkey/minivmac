@@ -7,16 +7,16 @@ FROM setup AS build
 ARG MACHINE_TYPE="II"
 ARG MAINTAINER="none"
 ARG HOMEPAGE="https://example.com"
+ARG COMMON_FLAGS="-n minivmac-37-bluescsi -bg 1 "
 
 COPY . /
 RUN gcc -o setup_t setup/tool.c
 
 RUN ./setup_t -maintainer "$MAINTAINER" \
         -homepage "$HOMEPAGE" \
-        -n "minivmac-3.7-bluescsi" \
         -t lx64 \
-        -bg 1 \
         -m II \
+        $COMMON_FLAGS \
         > setup.sh
 RUN sed -i '/.*SDL\.h/i printf \"%s\\n\" \"#define SDL_MAIN_HANDLED\" \>\> \"\$\{DestFile\}\"' setup.sh
 RUN bash -x ./setup.sh

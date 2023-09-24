@@ -8,6 +8,7 @@ declare -a types=("II" "Plus")
 declare -a platforms=("mc64" "mcar")
 MAINTAINER="erichelgeson@gmail.com"
 HOMEPAGE="https://bluescsi.com"
+COMMON_FLAGS=${*:-'-n minivmac-3.7-bluescsi -bg 1 '}
 mkdir -p dist/
 
 gcc -o setup_t setup/tool.c
@@ -18,10 +19,9 @@ do
         do
                 ./setup_t -maintainer $MAINTAINER \
                         -homepage $HOMEPAGE \
-                        -n "minivmac-3.7-bluescsi" \
                         -t $platform \
                         -m $type \
-                        -bg 1 \
+                        $COMMON_FLAGS \
                         -ev 13000 \
                         > setup.sh
                 . ./setup.sh

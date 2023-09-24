@@ -452,7 +452,7 @@ LOCALFUNC tMacErr vSonyNextPendingInsert(tDrive *Drive_No)
 									DataOffset = ((map[8] << 24) | (map[9] << 16) | (map[10] << 8) | map[11]) << 9;
 									DataSize = 512 * ((map[12] << 24) | (map[13] << 16) | (map[14] << 8) | map[15]);
 									gotFormat = trueblnr;
-									MacMsg("BlueSCSI Disk Found!", " ", falseblnr);
+									// MacMsg("BlueSCSI Disk Found!", " ", falseblnr);
 									break;
 								}
 							}
