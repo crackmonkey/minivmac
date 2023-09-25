@@ -41,7 +41,7 @@ jobs:
             $COMMON_FLAGS
             > setup.sh
       - name: SDL workaround
-        run: "sed -i '/.*SDL\.h/i printf \"%s\\n\" \"#define SDL_MAIN_HANDLED\" \>\> \"\$\{DestFile\}\"' setup.sh"
+        run: "sed -i '/.*SDL\\.h/i printf \"%s\\n\" \"#define SDL_MAIN_HANDLED\" \\>\\> \"\\$\\{DestFile\\}\"' setup.sh"
       - name: Generate Makefile
         run: "./setup.sh"
       - name: Compile
