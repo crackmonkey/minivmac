@@ -1,0 +1,58 @@
+name: build-packages
+on:
+  push:
+    tags:
+      - 'v*' # Push events to matching v*, i.e. v1.0, v20.15.10
+    branches: [ $default-branch ]
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  create-release:
+    uses: softprops/action-gh-release@v1
+    with:
+      draft: true
+      prerelease: true
+    outputs:
+      create-release: steps.create-release.outputs.assets[0].browser_download_url
+  build-linux:
+    needs: create-release
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        vmac_type:
+          - II
+          #- Plus
+          #- SE
+        host_platform:
+          - lx64
+    env:
+      COMMON_FLAGS: "-n minivmac-37-bluescsi -bg 1"
+    steps:
+      - uses: actions/checkout@v4
+      - name: Compile setup tool
+        run: gcc -o setup_t setup/tool.c
+      - name: Generate configuration script
+        run: >-
+          ./setup_t -maintainer "$GITHUB_ACTOR"
+            -homepage ${{ repositoryUrl }}
+            -t ${{ matrix.host_platform }}
+            -m ${{ matrix.vmac_type }}
+            $COMMON_FLAGS
+            > setup.sh
+      - name: SDL workaround
+        run: "sed -i '/.*SDL\.h/i printf \"%s\\n\" \"#define SDL_MAIN_HANDLED\" \>\> \"\$\{DestFile\}\"' setup.sh"
+      - name: Generate Makefile
+        run: "./setup.sh"
+      - name: Compile
+        run: make
+      - name: Upload Release Asset
+        id: upload-release-asset
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ needs.create-release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps
+          asset_path: ./minivmac
+          asset_name: minivmac-${{ matrix.host_platform }}-${{ matrix.vmac_type }}
+          asset_content_type: application/zip
