@@ -9,10 +9,11 @@ permissions:
   contents: write
 jobs:
   create-release:
-    uses: softprops/action-gh-release@v1
-    with:
-      draft: true
-      prerelease: true
+    steps:
+      - uses: softprops/action-gh-release@v1
+        with:
+          draft: true
+          prerelease: true
     outputs:
       create-release: steps.create-release.outputs.assets[0].browser_download_url
   build-linux:
