@@ -14,6 +14,7 @@ jobs:
       matrix:
         build_os:
           - ubuntu-latest
+          - macos-latest
         vmac_type:
           - II
           #- Plus
@@ -21,13 +22,17 @@ jobs:
         host_platform:
           - lx64
           - wx64
-        include:
-          - host_platform: mc64
-            build_os: macos-latest
-            vmac_type: ${{ matrix.vmac_type }}
-          - host_platform: mcar
-            build_os: macos-latest
-            vmac_type: ${{ matrix.vmac_type }}
+          - mc64
+          - mcar
+        exclude:
+          - build_os: ubuntu-latest
+            host_platform: mc64
+          - build_os: ubuntu-latest
+            host_platform: mcar
+          - build_os: macos-latest
+            host_platform: lx64
+          - build_os: macos-latest
+            host_platform: wx64
     env:
       COMMON_FLAGS: "-n minivmac-37-bluescsi -bg 1"
     steps:
