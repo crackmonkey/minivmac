@@ -10,8 +10,8 @@ on:
 jobs:
   build-variant:
     runs-on: ${{ matrix.build_os }}
+    continue-on-error: true
     strategy:
-      continue-on-error: true
       matrix:
         build_os:
           - ubuntu-latest
