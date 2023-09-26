@@ -36,15 +36,18 @@ jobs:
         run: gcc -o setup_t setup/tool.c
       - name: Extra arguemnts (Windows)
         if: host_platform=wx64
-        env:
-          EXTRA_ARGS: "-e mgw"
+        run: echo EXTRA_ARGS="-e mgw" >> $GITHUB_ENV
       - name: Extra arguemnts (macOS)
         if: startsWith(host_platform, 'mc')
-        env:
-          EXTRA_ARGS: "-ev 13000"
+        run: echo EXTRA_ARGS="-ev 13000" >> $GITHUB_ENV
       - name: Build dependancies (Windows)
         if: host_platform=wx64
-        run: apt install -y mingw-w64
+        run: |
+          apt install -y mingw-w64
+          ln -s /usr/bin/x86_64-w64-mingw32-gcc gcc.exe
+          ln -s /usr/bin/x86_64-w64-mingw32-windres windres.exe
+          ln -s /usr/bin/x86_64-w64-mingw32-strip strip.exe
+          ln -s src SRC
       - name: Generate configuration script
         run: >
           ./setup_t -maintainer "${{ github.actor }}"
