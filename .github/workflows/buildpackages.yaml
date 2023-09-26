@@ -65,7 +65,7 @@ jobs:
           > setup.sh
       - name: SDL workaround
         run: "sed -i '/.*SDL\\.h/i printf \"%s\\n\" \"#define SDL_MAIN_HANDLED\" \\>\\> \"\\$\\{DestFile\\}\"' setup.sh"
-        if: ${{ build_os == 'ubuntu-latest' }}
+        if: ${{ matrix.build_os == 'ubuntu-latest' }}
       - name: Generate Makefile
         run: "bash ./setup.sh"
       - name: Add . to PATH
