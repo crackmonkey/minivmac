@@ -13,7 +13,7 @@ jobs:
     strategy:
       matrix:
         build_os:
-          ubuntu-latest
+          - ubuntu-latest
         vmac_type:
           - II
           #- Plus
