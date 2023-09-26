@@ -9,27 +9,49 @@ on:
 
 jobs:
   build-linux:
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.build_os }}
     strategy:
       matrix:
+        build_os:
+          ubuntu-latest
         vmac_type:
           - II
           #- Plus
           #- SE
         host_platform:
           - lx64
+          - wx64
+          #- mc64
+          #- mcar
+        include:
+          - host_platform: mc64
+            build_os: macos-latest
+          - host_platform: mcar
+            build_os: macos-latest
     env:
       COMMON_FLAGS: "-n minivmac-37-bluescsi -bg 1"
     steps:
       - uses: actions/checkout@v4
       - name: Compile setup tool
         run: gcc -o setup_t setup/tool.c
+      - name: Extra arguemnts (Windows)
+        if: host_platform=wx64
+        env:
+          EXTRA_ARGS: "-e mgw"
+      - name: Extra arguemnts (macOS)
+        if: startsWith(host_platform, 'mc')
+        env:
+          EXTRA_ARGS: "-ev 13000"
+      - name: Build dependancies (Windows)
+        if: host_platform=wx64
+        run: apt install -y mingw-w64
       - name: Generate configuration script
         run: >
           ./setup_t -maintainer "${{ github.actor }}"
           -homepage ${{ github.repositoryUrl }}
           -t ${{ matrix.host_platform }}
           -m ${{ matrix.vmac_type }}
+          $EXTRA_ARGS
           $COMMON_FLAGS
           > setup.sh
       - name: SDL workaround
