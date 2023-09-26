@@ -35,7 +35,9 @@ jobs:
       - name: SDL workaround
         run: "sed -i '/.*SDL\\.h/i printf \"%s\\n\" \"#define SDL_MAIN_HANDLED\" \\>\\> \"\\$\\{DestFile\\}\"' setup.sh"
       - name: Generate Makefile
-        run: "./setup.sh"
+        run: "bash ./setup.sh"
+      - name: Add . to PATH
+        run: echo . >> $GITHUB_PATH
       - name: Compile
         run: make
       - name: Upload a Build Artifact
