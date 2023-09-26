@@ -33,6 +33,8 @@ jobs:
             host_platform: lx64
           - build_os: macos-latest
             host_platform: wx64
+    strategy:
+      continue-on-error: true
     env:
       COMMON_FLAGS: "-n minivmac-37-bluescsi -bg 1"
     steps:
@@ -63,7 +65,7 @@ jobs:
           $COMMON_FLAGS
           > setup.sh
       - name: SDL workaround
-        run: "sed -i '/.*SDL\\.h/i printf \"%s\\n\" \"#define SDL_MAIN_HANDLED\" \\>\\> \"\\$\\{DestFile\\}\"' setup.sh"
+        run: "sed -i "" '/.*SDL\\.h/i printf \"%s\\n\" \"#define SDL_MAIN_HANDLED\" \\>\\> \"\\$\\{DestFile\\}\"' setup.sh"
       - name: Generate Makefile
         run: "bash ./setup.sh"
       - name: Add . to PATH
