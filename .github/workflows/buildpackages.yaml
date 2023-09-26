@@ -21,13 +21,13 @@ jobs:
         host_platform:
           - lx64
           - wx64
-          #- mc64
-          #- mcar
         include:
           - host_platform: mc64
             build_os: macos-latest
+            vmac_type: ${{ matrix.vmac_type }}
           - host_platform: mcar
             build_os: macos-latest
+            vmac_type: ${{ matrix.vmac_type }}
     env:
       COMMON_FLAGS: "-n minivmac-37-bluescsi -bg 1"
     steps:
@@ -43,7 +43,7 @@ jobs:
       - name: Build dependancies (Windows)
         if: ${{ matrix.host_platform=='wx64' }}
         run: |
-          apt install -y mingw-w64
+          sudo apt install -y mingw-w64
           ln -s /usr/bin/x86_64-w64-mingw32-gcc gcc.exe
           ln -s /usr/bin/x86_64-w64-mingw32-windres windres.exe
           ln -s /usr/bin/x86_64-w64-mingw32-strip strip.exe
