@@ -9,7 +9,6 @@ on:
 
 jobs:
   build-linux:
-    needs: create-release
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -27,8 +26,8 @@ jobs:
         run: gcc -o setup_t setup/tool.c
       - name: Generate configuration script
         run: >-
-          ./setup_t -maintainer "$GITHUB_ACTOR"
-            -homepage ${{ repositoryUrl }}
+          ./setup_t -maintainer "${{ github.actor }}"
+            -homepage ${{ github.repositoryUrl }}
             -t ${{ matrix.host_platform }}
             -m ${{ matrix.vmac_type }}
             $COMMON_FLAGS
