@@ -35,13 +35,13 @@ jobs:
       - name: Compile setup tool
         run: gcc -o setup_t setup/tool.c
       - name: Extra arguemnts (Windows)
-        if: matrix.host_platform=wx64
+        if: ${{ matrix.host_platform==wx64 }}
         run: echo EXTRA_ARGS="-e mgw" >> $GITHUB_ENV
       - name: Extra arguemnts (macOS)
-        if: startsWith(matrix.host_platform, 'mc')
+        if: ${{ startsWith(matrix.host_platform, 'mc') }}
         run: echo EXTRA_ARGS="-ev 13000" >> $GITHUB_ENV
       - name: Build dependancies (Windows)
-        if: matrix.host_platform=wx64
+        if: ${{ matrix.host_platform==wx64 }}
         run: |
           apt install -y mingw-w64
           ln -s /usr/bin/x86_64-w64-mingw32-gcc gcc.exe
