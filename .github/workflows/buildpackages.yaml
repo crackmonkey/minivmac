@@ -1,12 +1,11 @@
 name: build-packages
 on:
-  push:
-    tags:
-      - 'v*' # Push events to matching v*, i.e. v1.0, v20.15.10
-    branches: [ $default-branch ]
   workflow_dispatch:
   pull_request:
-
+  
+  # called by the release workflow
+  workflow_call:
+  
 jobs:
   build-variant:
     runs-on: ${{ matrix.build_os }}
