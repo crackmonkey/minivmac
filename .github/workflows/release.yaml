@@ -8,9 +8,7 @@ on:
 jobs:
   make-release-executables:
     runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - uses: ./.github/workflows/buildpackages.yaml
+    uses: ./.github/workflows/buildpackages.yaml
   make-release-packages:
     needs: make-release-executables
     runs-on: ubuntu-latest
