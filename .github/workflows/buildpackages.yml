@@ -87,5 +87,5 @@ jobs:
           # Artifact name
           name: minivmac-${{ matrix.host_platform }}
           # A file, directory or wildcard pattern that describes what to upload
-          path: minivmac-${{ matrix.vmac_type }}${{ env.SUFFIX }}
+          path: '?/minivmac-${{ matrix.vmac_type }}${{ env.SUFFIX }}'
           if-no-files-found: error

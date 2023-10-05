@@ -22,7 +22,7 @@ jobs:
           hosts="lx64 wx64 mc64 mcar"
           for host in $hosts; do
             echo "Creating $host.zip"
-            zip -rv $host.zip $host/*
+            zip -rv $host.zip minivmac-$host/*
           done
       - name: Create Release
         id: create_release
