@@ -6,6 +6,9 @@ on:
       - 'v*' # Push events to matching v*, i.e. v1.0, v20.15.10
     branches: [ $default-branch ]
 
+permissions:
+  contents: write
+  
 jobs:
   make-release-executables:
     uses: ./.github/workflows/buildpackages.yml
@@ -26,17 +29,12 @@ jobs:
           done
       - name: Create Release
         id: create_release
-        uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
+        uses: softprops/action-gh-release@v1
+        #if: startsWith(github.ref, 'refs/tags/')
         with:
-          tag_name: ${{ github.ref }}
-          release_name: Release ${{ github.ref }}
-          body: |
-            Changes in this Release
-            - First Change
-            - Second Change
+          #tag_name: ${{ github.ref_name }}
+          #release_name: Release ${{ github.ref_name }}
+          #body: ${{ github.event.head_commit.message }}
           draft: true
           prerelease: false
-
-        
+          files: *.zip

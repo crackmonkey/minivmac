@@ -80,7 +80,7 @@ jobs:
         if: ${{ runner.os == 'macOS' }}
         run: xcodebuild
       - name: Rename executable
-        run: mv minivmac${{ env.SUFFIX }} output/minivmac-${{ matrix.vmac_type }}${{ env.SUFFIX }}
+        run: mkdir output && mv minivmac${{ env.SUFFIX }} output/minivmac-${{ matrix.vmac_type }}${{ env.SUFFIX }}
       - name: Upload a Build Artifact
         uses: actions/upload-artifact@v3.1.3
         with:
