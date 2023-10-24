@@ -25,15 +25,19 @@ jobs:
           hosts="lx64 wx64 mc64 mcar"
           for host in $hosts; do
             echo "Creating $host.zip"
-            zip -rv $host.zip $host-*/*
+            mkdir $host
+            mv $host-*/* $host/
+            pushd $host
+            zip -rv ../$host.zip .
+            popd
           done
       - name: Create Release
         id: create_release
         uses: softprops/action-gh-release@v1
-        #if: startsWith(github.ref, 'refs/tags/')
+        if: startsWith(github.ref, 'refs/tags/')
         with:
           tag_name: ${{ github.ref_name }}
-          release_name: Release ${{ github.ref_name }}
+          name: Release ${{ github.ref_name }}
           body: ${{ github.event.head_commit.message }}
           draft: true
           prerelease: false
