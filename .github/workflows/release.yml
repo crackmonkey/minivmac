@@ -37,4 +37,4 @@ jobs:
           #body: ${{ github.event.head_commit.message }}
           draft: true
           prerelease: false
-          files: *.zip
+          files: '*.zip'
